@@ -5,9 +5,12 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.StreamSupport;
+
+import com.google.gson.Gson;
 
 public class CensusAnalyser {
 
@@ -59,4 +62,27 @@ public class CensusAnalyser {
 		int noOfEntries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
 		return noOfEntries;
 	}
+
+	public String getStateWiseSortedCensusData(String csvFilePath) throws CensusAnalyserException {
+		loadIndiaCensusData(csvFilePath);
+		if (csvFileList == null || csvFileList.size() == 0)
+			throw new CensusAnalyserException("NO_CENSUS_DATA", CensusAnalyserException.ExceptionType.NO_CENSUS_DATA);
+		Comparator<IndianCensusDAO> censusComparator = Comparator.comparing(census -> census.state);
+		this.sort(censusComparator);
+		return new Gson().toJson(this.csvFileList);
+	}
+
+	private void sort(Comparator<IndianCensusDAO> censusComparator) {
+		for (int i = 0; i < csvFileList.size(); i++) {
+			for (int j = 0; j < csvFileList.size() - i - 1; j++) {
+				IndianCensusDAO census1 = csvFileList.get(j);
+				IndianCensusDAO census2 = csvFileList.get(j + 1);
+				if (censusComparator.compare(census1, census2) > 0) {
+					csvFileList.set(j, census2);
+					csvFileList.set(j + 1, census1);
+				}
+			}
+		}
+	}
+
 }
