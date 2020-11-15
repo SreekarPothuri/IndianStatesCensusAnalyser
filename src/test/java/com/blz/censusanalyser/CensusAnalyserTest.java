@@ -83,7 +83,7 @@ public class CensusAnalyserTest {
 	public void givenIndianStateCodeCSVFile_ReturnsCorrectRecords() {
 		try {
 			int numOfRecords = censusAnalyser.loadIndiaStateCodeData(INDIA_CODE_CSV_FILE_PATH);
-			Assert.assertEquals(29, numOfRecords);
+			Assert.assertEquals(37, numOfRecords);
 		} catch (CensusAnalyserException e) {
 		}
 	}
@@ -142,6 +142,17 @@ public class CensusAnalyserTest {
 			Assert.assertEquals("Andhra Pradesh", censusCSV[0].state);
 		} catch (CensusAnalyserException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	//UC4
+	public void givenIndianStateCodeData_WhenSortedOnStateCode_ShouldReturnResult() {
+		String sortedCensusData = null;
+		try {
+			sortedCensusData = censusAnalyser.getStateCodeSortedIndiaStateCodedata(INDIA_CODE_CSV_FILE_PATH);
+			IndiaStateCodeCSV[] codeCSV = new Gson().fromJson(sortedCensusData, IndiaStateCodeCSV[].class);
+			Assert.assertEquals("AP", codeCSV[0].stateCode);
+		}catch(CensusAnalyserException e) {
 		}
 	}
 }
