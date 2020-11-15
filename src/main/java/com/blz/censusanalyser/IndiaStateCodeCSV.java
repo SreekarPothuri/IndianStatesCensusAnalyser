@@ -16,6 +16,18 @@ public class IndiaStateCodeCSV {
 	@CsvBindByName(column = "StateCode", required = true)
 	public String stateCode;
 
+	
+	public IndiaStateCodeCSV(IndiaStateCodeCSV indiaStateCode) {
+		serialNum = indiaStateCode.serialNum;
+		state = indiaStateCode.state;
+		tinNum = indiaStateCode.tinNum;
+		stateCode = indiaStateCode.stateCode;
+	}
+
+	public String getStateCode() {
+		return stateCode;
+	}
+
 	@Override
 	public String toString() {
 		return "IndiaCensusCSV{" + "SrNo='" + serialNum + '\'' + ", State Name='" + state + '\'' + ", Tax Identification Number='"
